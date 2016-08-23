@@ -20,6 +20,7 @@ public class UsersModel extends AbstractModel {
 	private String createdDate;
 	private String userType;
 	private String password;
+	private String confirmPassword;
 	private String emailStatus;
 	private String gender;
 	private List<PaymentModel> paymentModels = new ArrayList<PaymentModel>(0);
@@ -138,6 +139,14 @@ public class UsersModel extends AbstractModel {
 
 	public void setRolesModels(List<RolesModel> rolesModels) {
 		this.rolesModels = rolesModels;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }

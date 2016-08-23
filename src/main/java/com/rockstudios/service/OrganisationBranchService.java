@@ -1,5 +1,6 @@
 package com.rockstudios.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -35,6 +36,8 @@ public class OrganisationBranchService implements IOrganisationBranchService{
         String m = DBSequences.ORGANISATIONBRANCH.getSequenceName();
         String mc = m.concat(co.toString());
         organisationBranch.setBranchCode(mc);
+        organisationBranch.setCreatedDate(new Date());
+        organisationBranch.setStatus("ACTIVE");
 		return organisationBranchRepository.save(organisationBranch);
 	}
 

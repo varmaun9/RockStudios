@@ -51,7 +51,7 @@ public class OrganisationBusinessDelegate
 		// TODO Auto-generated method stub
 		Validate.notNull(model, "Invalid Input");
 		Validate.notBlank(model.getOrganisationName(), "Invalid OrganisationName");
-
+		
 	}
 
 	@Override

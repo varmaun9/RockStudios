@@ -1,6 +1,9 @@
 package com.rockstudios.service;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,9 +18,13 @@ public class CourseService implements ICourseService{
 
 	@Autowired
 	private CourseRepository courseRepository;
+	
 	@Override
+	@Transactional
 	public Course create(Course course) {
-		// TODO Auto-generated method stub
+		course.setStatus("ACTIVE");
+		course.setCreatedDate(new Date());
+		course.setCourseCode(course.getCourseCode().toUpperCase());
 		return courseRepository.save(course);
 	}
 

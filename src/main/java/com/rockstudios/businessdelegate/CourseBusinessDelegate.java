@@ -1,9 +1,13 @@
 package com.rockstudios.businessdelegate;
 
+import static org.springframework.core.convert.TypeDescriptor.forObject;
+import static org.springframework.core.convert.TypeDescriptor.valueOf;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -30,9 +34,23 @@ public class CourseBusinessDelegate
 
 	@Override
 	public CourseModel create(CourseModel model) {
+		validateModel(model);
+		Course course = courseService
+				.create((Course) conversionService.convert(model, forObject(model), valueOf(Course.class)));
+		model = convertToCourseModel(course);
+		return model;
+	}
 
-		
-		return null;
+	private CourseModel convertToCourseModel(Course course) {
+		return (CourseModel) conversionService.convert(course, forObject(course),
+				valueOf(CourseModel.class));
+	}
+
+	private void validateModel(CourseModel model) {
+		Validate.notNull(model, "Invalid Input");
+		Validate.notBlank(model.getCourseName(), "Invalid courseName");
+		Validate.notBlank(model.getCourseCode(), "Invalid courseCode");
+		Validate.notBlank(model.getOrganisationBranchId(),"Invalid organisationBranchId");
 	}
 
 	@Override

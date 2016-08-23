@@ -17,7 +17,6 @@ public class CourseBatchService implements ICourseBatchService{
 	private CourseBatchRepository courseBatchRepository;
 	@Override
 	public CourseBatch create(CourseBatch courseBatch) {
-		// TODO Auto-generated method stub
 		return courseBatchRepository.save(courseBatch);
 	}
 
