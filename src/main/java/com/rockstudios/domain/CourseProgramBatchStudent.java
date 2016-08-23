@@ -5,10 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,9 +22,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "course_program_batch_student", catalog = "rockstudios")
-public class CourseProgramBatchStudent implements java.io.Serializable {
+public class CourseProgramBatchStudent extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private Users users;
 	private CourseProgram courseProgram;
 	private CourseBatch courseBatch;
@@ -80,16 +80,6 @@ public class CourseProgramBatchStudent implements java.io.Serializable {
 		this.payments = payments;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", nullable = false)
@@ -213,7 +203,7 @@ public class CourseProgramBatchStudent implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseProgramBatchStudent")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseProgramBatchStudent" ,cascade = CascadeType.ALL)
 	public Set<Payment> getPayments() {
 		return this.payments;
 	}

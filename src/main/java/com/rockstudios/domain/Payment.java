@@ -3,10 +3,10 @@ package com.rockstudios.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,9 +18,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "payment", catalog = "rockstudios")
-public class Payment implements java.io.Serializable {
+public class Payment extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private Users users;
 	private CourseProgramBatchStudent courseProgramBatchStudent;
 	private BigDecimal payableAmount;
@@ -63,16 +62,6 @@ public class Payment implements java.io.Serializable {
 		this.comments = comments;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", nullable = false)

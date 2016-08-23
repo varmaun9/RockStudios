@@ -21,6 +21,12 @@ import com.rockstudios.resources.hal.CourseResource;
 	@Service
 	public class CourseResourceAssembler extends EmbeddableResourceAssemblerSupport<CourseModel, CourseResource, CourseController> {
 
+		@Autowired
+		private CourseBatchResourceAssembler courseBatchResourceAssembler;
+
+		@Autowired
+		private CourseProgramResourceAssembler courseProgramResourceAssembler;
+		
 		 @Autowired
 		    public CourseResourceAssembler(final EntityLinks entityLinks, final RelProvider relProvider) {
 		        super(entityLinks, relProvider, CourseController.class, CourseResource.class);
@@ -45,8 +51,15 @@ import com.rockstudios.resources.hal.CourseResource;
 		        resource.setCourseId(entity.getId());
 
 		        final List<EmbeddedWrapper> embeddables = new ArrayList<EmbeddedWrapper>();
-		      
+		        if (entity.getCourseBatchModels() != null) {
+					embeddables.addAll(courseBatchResourceAssembler
+							.toEmbeddable(entity.getCourseBatchModels()));
+				}
 
+		        if (entity.getCourseProgramModels() != null) {
+					embeddables.addAll(courseProgramResourceAssembler
+							.toEmbeddable(entity.getCourseProgramModels()));
+				}
 		        resource.setEmbeddeds(new Resources<>(embeddables));
 		        return resource;
 		    }

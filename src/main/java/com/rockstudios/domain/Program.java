@@ -3,10 +3,11 @@ package com.rockstudios.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -15,9 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "program", catalog = "rockstudios")
-public class Program implements java.io.Serializable {
+public class Program extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private String programName;
 	private String duration;
 	private String status;
@@ -44,16 +44,6 @@ public class Program implements java.io.Serializable {
 		this.coursePrograms = coursePrograms;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Column(name = "program_name", nullable = false, length = 45)
 	public String getProgramName() {
@@ -91,7 +81,7 @@ public class Program implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "program")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "program" , cascade = CascadeType.ALL)
 	public Set<CourseProgram> getCoursePrograms() {
 		return this.coursePrograms;
 	}

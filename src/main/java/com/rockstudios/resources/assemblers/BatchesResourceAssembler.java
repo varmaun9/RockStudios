@@ -21,6 +21,8 @@ import com.rockstudios.resources.hal.BatchesResource;
 	@Service
 	public class BatchesResourceAssembler extends EmbeddableResourceAssemblerSupport<BatchesModel, BatchesResource, BatchesController> {
 
+		@Autowired
+		private CourseBatchResourceAssembler courseBatchResourceAssembler;
 		 @Autowired
 		    public BatchesResourceAssembler(final EntityLinks entityLinks, final RelProvider relProvider) {
 		        super(entityLinks, relProvider, BatchesController.class, BatchesResource.class);
@@ -45,7 +47,9 @@ import com.rockstudios.resources.hal.BatchesResource;
 		        resource.setBatchesId(entity.getId());
 
 		        final List<EmbeddedWrapper> embeddables = new ArrayList<EmbeddedWrapper>();
-		      
+		        if (entity.getCourseBatchModels() != null) {
+		            embeddables.addAll(courseBatchResourceAssembler.toEmbeddable(entity.getCourseBatchModels()));
+		        }
 
 		        resource.setEmbeddeds(new Resources<>(embeddables));
 		        return resource;

@@ -4,10 +4,11 @@ package com.rockstudios.domain;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -18,9 +19,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "batches", catalog = "rockstudios")
-public class Batches implements java.io.Serializable {
+public class Batches extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private String batchName;
 	private String startTime;
 	private String endTime;
@@ -109,7 +109,7 @@ public class Batches implements java.io.Serializable {
 		this.createdDate = createdDate;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "batches")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "batches" , cascade=CascadeType.ALL)
 	public Set<CourseBatch> getCourseBatches() {
 		return this.courseBatches;
 	}

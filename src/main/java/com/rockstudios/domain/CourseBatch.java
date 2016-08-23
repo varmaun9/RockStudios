@@ -3,10 +3,11 @@ package com.rockstudios.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,9 +18,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "course_batch", catalog = "rockstudios")
-public class CourseBatch implements java.io.Serializable {
+public class CourseBatch extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private Course course;
 	private Batches batches;
 	private String status;
@@ -46,16 +46,6 @@ public class CourseBatch implements java.io.Serializable {
 		this.courseProgramBatchStudents = courseProgramBatchStudents;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id", nullable = false)
@@ -95,7 +85,7 @@ public class CourseBatch implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseBatch")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseBatch" , cascade = CascadeType.ALL)
 	public Set<CourseProgramBatchStudent> getCourseProgramBatchStudents() {
 		return this.courseProgramBatchStudents;
 	}

@@ -4,7 +4,6 @@ package com.rockstudios.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,9 +13,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "roles", catalog = "rockstudios")
-public class Roles implements java.io.Serializable {
+public class Roles extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private Users users;
 	private String roleName;
 	private String roleDetails;
@@ -33,16 +31,6 @@ public class Roles implements java.io.Serializable {
 		this.status = status;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", nullable = false)

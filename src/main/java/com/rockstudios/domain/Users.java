@@ -3,10 +3,11 @@ package com.rockstudios.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -15,9 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "users", catalog = "rockstudios")
-public class Users implements java.io.Serializable {
+public class Users extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private String userName;
 	private String emailId;
 	private String phoneNo;
@@ -71,16 +71,6 @@ public class Users implements java.io.Serializable {
 		this.roleses = roleses;
 	}
 
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Column(name = "user_name", nullable = false, length = 100)
 	public String getUserName() {
@@ -199,7 +189,7 @@ public class Users implements java.io.Serializable {
 		this.courseProgramBatchStudents = courseProgramBatchStudents;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users" ,cascade = CascadeType.ALL)
 	public Set<Roles> getRoleses() {
 		return this.roleses;
 	}

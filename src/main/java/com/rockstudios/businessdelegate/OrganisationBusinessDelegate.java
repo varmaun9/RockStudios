@@ -1,9 +1,13 @@
 package com.rockstudios.businessdelegate;
 
+import static org.springframework.core.convert.TypeDescriptor.forObject;
+import static org.springframework.core.convert.TypeDescriptor.valueOf;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -30,9 +34,24 @@ public class OrganisationBusinessDelegate
 
 	@Override
 	public OrganisationModel create(OrganisationModel model) {
+		validateModel(model);
+		Organisation organisation = organisationService
+				.create((Organisation) conversionService.convert(model, forObject(model), valueOf(Organisation.class)));
+		model = convertToOrganisationModel(organisation);
+		return model;
+	}
 
-		
-		return null;
+	private OrganisationModel convertToOrganisationModel(Organisation organisation) {
+		return (OrganisationModel) conversionService.convert(organisation, forObject(organisation),
+				valueOf(OrganisationModel.class));
+
+	}
+
+	private void validateModel(OrganisationModel model) {
+		// TODO Auto-generated method stub
+		Validate.notNull(model, "Invalid Input");
+		Validate.notBlank(model.getOrganisationName(), "Invalid OrganisationName");
+
 	}
 
 	@Override
@@ -43,9 +62,9 @@ public class OrganisationBusinessDelegate
 	@Override
 	public OrganisationModel edit(IKeyBuilder<String> keyBuilder, OrganisationModel model) {
 		Organisation organisation = organisationService.getOrganisation(keyBuilder.build().toString());
-		
+
 		organisation = organisationService.updateOrganisation(organisation);
-		
+
 		return model;
 	}
 
@@ -62,8 +81,8 @@ public class OrganisationBusinessDelegate
 		if (context.getAll() != null) {
 			organisation = organisationService.getAll();
 		}
-		List<OrganisationModel> organisationModels = (List<OrganisationModel>) conversionService.convert(
-				organisation, TypeDescriptor.forObject(organisation),
+		List<OrganisationModel> organisationModels = (List<OrganisationModel>) conversionService.convert(organisation,
+				TypeDescriptor.forObject(organisation),
 				TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(OrganisationModel.class)));
 		return organisationModels;
 	}

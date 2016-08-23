@@ -15,39 +15,46 @@ import org.springframework.stereotype.Service;
 import com.rockstudios.controller.CourseBatchController;
 import com.rockstudios.model.CourseBatchModel;
 import com.rockstudios.resources.hal.CourseBatchResource;
+
 /*
 *@Author Sankar
 */
-	@Service
-	public class CourseBatchResourceAssembler extends EmbeddableResourceAssemblerSupport<CourseBatchModel, CourseBatchResource, CourseBatchController> {
+@Service
+public class CourseBatchResourceAssembler
+		extends EmbeddableResourceAssemblerSupport<CourseBatchModel, CourseBatchResource, CourseBatchController> {
+	@Autowired
+	private CourseProgramBatchStudentResourceAssembler courseProgramBatchStudentResourceAssembler;
 
-		 @Autowired
-		    public CourseBatchResourceAssembler(final EntityLinks entityLinks, final RelProvider relProvider) {
-		        super(entityLinks, relProvider, CourseBatchController.class, CourseBatchResource.class);
-		    }
+	@Autowired
+	public CourseBatchResourceAssembler(final EntityLinks entityLinks, final RelProvider relProvider) {
+		super(entityLinks, relProvider, CourseBatchController.class, CourseBatchResource.class);
+	}
 
-		    @Override
-		    public Link linkToSingleResource(final CourseBatchModel courseBatchModel) {
-		        return entityLinks.linkToSingleResource(CourseBatchResource.class, courseBatchModel.getId());
-		    }
+	@Override
+	public Link linkToSingleResource(final CourseBatchModel courseBatchModel) {
+		return entityLinks.linkToSingleResource(CourseBatchResource.class, courseBatchModel.getId());
+	}
 
-		    public CourseBatchResource toDetailedResource(final CourseBatchModel entity) {
-		        final CourseBatchResource resource = createResourceWithId(entity.getId(), entity);
+	public CourseBatchResource toDetailedResource(final CourseBatchModel entity) {
+		final CourseBatchResource resource = createResourceWithId(entity.getId(), entity);
 
-		        return resource;
-		    }
+		return resource;
+	}
 
-		    @Override
-		    public CourseBatchResource toResource(final CourseBatchModel entity) {
-		        final CourseBatchResource resource = createResourceWithId(entity.getId(), entity);
+	@Override
+	public CourseBatchResource toResource(final CourseBatchModel entity) {
+		final CourseBatchResource resource = createResourceWithId(entity.getId(), entity);
 
-		        BeanUtils.copyProperties(entity, resource);
-		        resource.setCourseBatchId(entity.getId());
+		BeanUtils.copyProperties(entity, resource);
+		resource.setCourseBatchId(entity.getId());
 
-		        final List<EmbeddedWrapper> embeddables = new ArrayList<EmbeddedWrapper>();
-		      
+		final List<EmbeddedWrapper> embeddables = new ArrayList<EmbeddedWrapper>();
 
-		        resource.setEmbeddeds(new Resources<>(embeddables));
-		        return resource;
-		    }
+		if (entity.getCourseProgramBatchStudentModels() != null) {
+			embeddables.addAll(courseProgramBatchStudentResourceAssembler
+					.toEmbeddable(entity.getCourseProgramBatchStudentModels()));
+		}
+		resource.setEmbeddeds(new Resources<>(embeddables));
+		return resource;
+	}
 }

@@ -3,10 +3,11 @@ package com.rockstudios.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,9 +18,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "organisation_branch", catalog = "rockstudios")
-public class OrganisationBranch implements java.io.Serializable {
+public class OrganisationBranch extends AbstractDomain implements java.io.Serializable {
 
-	private String id;
 	private Organisation organisation;
 	private String branchName;
 	private String branchEmailId;
@@ -28,13 +28,15 @@ public class OrganisationBranch implements java.io.Serializable {
 	private String status;
 	private String createdDate;
 	private String branchCode;
+	private Integer branchCount;
+	private String address;
 	private Set<Course> courses = new HashSet<Course>(0);
 
 	public OrganisationBranch() {
 	}
 
 	public OrganisationBranch(String id, Organisation organisation, String branchName, String branchPhoneNo,
-			String status, String createdDate, String branchCode) {
+			String status, String createdDate, String branchCode, Integer branchCount) {
 		this.id = id;
 		this.organisation = organisation;
 		this.branchName = branchName;
@@ -42,11 +44,12 @@ public class OrganisationBranch implements java.io.Serializable {
 		this.status = status;
 		this.createdDate = createdDate;
 		this.branchCode = branchCode;
+		this.branchCount = branchCount;
 	}
 
 	public OrganisationBranch(String id, Organisation organisation, String branchName, String branchEmailId,
-			String branchPhoneNo, String branchAlternativePhoneNo, String status, String createdDate, String branchCode,
-			Set<Course> courses) {
+			String branchPhoneNo, String branchAlternativePhoneNo, Integer branchCount, String status,
+			String createdDate, String branchCode, Set<Course> courses) {
 		this.id = id;
 		this.organisation = organisation;
 		this.branchName = branchName;
@@ -56,18 +59,8 @@ public class OrganisationBranch implements java.io.Serializable {
 		this.status = status;
 		this.createdDate = createdDate;
 		this.branchCode = branchCode;
+		this.branchCount = branchCount;
 		this.courses = courses;
-	}
-
-	@Id
-
-	@Column(name = "id", unique = true, nullable = false, length = 100)
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -143,13 +136,30 @@ public class OrganisationBranch implements java.io.Serializable {
 		this.branchCode = branchCode;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "organisationBranch")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "organisationBranch", cascade = CascadeType.ALL)
 	public Set<Course> getCourses() {
 		return this.courses;
 	}
 
 	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	@Column(name = "branch_count")
+	public Integer getBranchCount() {
+		return branchCount;
+	}
+
+	public void setBranchCount(Integer branchCount) {
+		this.branchCount = branchCount;
 	}
 
 }

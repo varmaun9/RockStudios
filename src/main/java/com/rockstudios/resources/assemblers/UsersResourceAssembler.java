@@ -21,6 +21,8 @@ import com.rockstudios.resources.hal.UsersResource;
 	@Service
 	public class UsersResourceAssembler extends EmbeddableResourceAssemblerSupport<UsersModel, UsersResource, UsersController> {
 
+		@Autowired
+		private RolesResourceAssembler rolesResourceAssembler;
 		 @Autowired
 		    public UsersResourceAssembler(final EntityLinks entityLinks, final RelProvider relProvider) {
 		        super(entityLinks, relProvider, UsersController.class, UsersResource.class);
@@ -46,7 +48,10 @@ import com.rockstudios.resources.hal.UsersResource;
 
 		        final List<EmbeddedWrapper> embeddables = new ArrayList<EmbeddedWrapper>();
 		      
-
+		        if (entity.getRolesModels() != null) {
+					embeddables.addAll(rolesResourceAssembler
+							.toEmbeddable(entity.getRolesModels()));
+				}
 		        resource.setEmbeddeds(new Resources<>(embeddables));
 		        return resource;
 		    }
